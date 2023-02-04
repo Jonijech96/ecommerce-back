@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const { cart, product_in_cart, product } = require("../models");
 
 class CartServices {
@@ -10,14 +10,14 @@ class CartServices {
       throw error;
     }
   }
-  static async getId(id) {
+  static async getCart(id) {
     try {
       const result = await cart.findOne({
         where: { user_id: id },
         // include: { attributes: ["id"] },
       });
       // console.log(result);
-      return result.id;
+      return result;
     } catch (error) {
       throw error;
     }
@@ -43,17 +43,13 @@ class CartServices {
       throw error;
     }
   }
-  static async getProducts(user_id) {
+  static async getProducts(cart_id) {
     try {
-      const result = await cart.findAll({
-        where: { user_id },
+      const result = await product_in_cart.findAll({
+        where: { cart_id },
         include: {
-          model: product_in_cart,
-          as: "product_in_carts",
-          include: {
-            model: product,
-            as: "product",
-          },
+          model: product,
+          as: "product",
         },
       });
       return result;
@@ -68,9 +64,10 @@ class CartServices {
           [Op.and]: [{ cart_id: idCart }, { product_id: idProduct }],
         },
       });
-      return data.id
-        ? { isValid: true, id: data.id, quantity: data.quantity }
-        : { isValid: false };
+      if (!data) {
+        return { isValid: false };
+      }
+      return { isValid: true, id: data.id, quantity: data.quantity };
     } catch (error) {
       throw error;
     }
@@ -83,6 +80,24 @@ class CartServices {
         { where: { id } }
       );
       return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async restoreCart(id) {
+    try {
+      const result = await cart.update({ total_price: 0 }, { where: { id } });
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async destroyProducts(id) {
+    try {
+      const result = await product_in_cart.destroy({ where: { cart_id: id } });
+      return result;
     } catch (error) {
       throw error;
     }

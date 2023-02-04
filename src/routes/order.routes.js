@@ -1,5 +1,9 @@
 const { Router } = require("express");
-const { getOrder } = require("../controllers/order.controllers");
+const {
+  getOrder,
+  createOrder,
+  statusOrder,
+} = require("../controllers/order.controllers");
 // const {
 //   addProductInCart,
 //   getProductsById,
@@ -9,8 +13,9 @@ const authMiddleware = require("../middlewares/auth.middleware");
 const router = Router();
 
 // router.post("/", authMiddleware, addProductInOrder);
-// router.post("/", authMiddleware, createOrder);
+router.post("/", authMiddleware, createOrder);
 router.get("/", authMiddleware, getOrder);
+router.put("/", authMiddleware, statusOrder);
 
 // router.post("/", createProduct);
 // router.post("/login", login);

@@ -42,6 +42,17 @@ class ProductServices {
       throw error;
     }
   }
+  static async update(id, quantity) {
+    try {
+      const result = await product.decrement(
+        { available_qty: quantity },
+        { where: { id } }
+      );
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = ProductServices;

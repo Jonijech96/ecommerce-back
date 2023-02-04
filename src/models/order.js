@@ -27,9 +27,9 @@ class order extends Sequelize.Model {
       }
     },
     status: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.ENUM("pending","purchased","cancelled"),
       allowNull: true,
-      defaultValue: false
+      defaultValue: "pending"
     }
   }, {
     sequelize,

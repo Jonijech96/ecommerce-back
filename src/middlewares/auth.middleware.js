@@ -17,7 +17,7 @@ const authMiddleware = (req, res, next) => {
         });
       } else {
         req.user = decoded;
-        console.log("usuario autenticadp");
+        console.log("usuario autenticado");
         next();
       }
     }
