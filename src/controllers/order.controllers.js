@@ -46,7 +46,7 @@ const statusOrder = async (req, res) => {
     }
     const result = await OrderServices.updateStatus(id, status);
 
-    if (status) {
+    if (status == "purchased") {
       const products = await OrderServices.getProducts(id);
 
       products.forEach(async (product) => {

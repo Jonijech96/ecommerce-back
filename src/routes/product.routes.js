@@ -29,8 +29,9 @@ const router = Router();
  *               message:
  *                 type: string
  *                 example: error
- * /api/v1/auth/products:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: create a new product
  *     tags: [Products]
  *     requestBody:
@@ -64,7 +65,7 @@ const router = Router();
  */
 
 router.get("/", getAllProducts);
-router.post("/", createProduct);
+router.post("/", authMiddleware, createProduct);
 // router.post("/login", login);
 // router.get("/authenticate", authMiddleware, testAutentificator);
 
